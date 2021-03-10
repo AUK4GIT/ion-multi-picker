@@ -1,5 +1,6 @@
 export interface MultiPickerOption {
     text?: string;
+    title?: string;
     value?: any;
     parentVal?: any;
     disabled?: boolean;

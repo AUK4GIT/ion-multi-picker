@@ -6,7 +6,7 @@ var ionic_angular_1 = require("ionic-angular");
 exports.MULTI_PICKER_VALUE_ACCESSOR = {
     provide: forms_1.NG_VALUE_ACCESSOR,
     useExisting: core_1.forwardRef(function () { return MultiPicker; }),
-    multi: true
+    multi: true,
 };
 var MultiPicker = (function () {
     function MultiPicker(_form, _item, _pickerCtrl) {
@@ -14,28 +14,29 @@ var MultiPicker = (function () {
         this._item = _item;
         this._pickerCtrl = _pickerCtrl;
         this._disabled = false;
-        this._labelId = '';
-        this._text = '';
+        this._labelId = "";
+        this._text = "";
+        this._title = "";
         this._isOpen = false;
         this._isDependent = false;
         this._sequence = [];
         this._originSelectedIndexes = [];
-        this.cancelText = 'Cancel';
-        this.doneText = 'Done';
-        this.resetText = 'Reset';
+        this.cancelText = "Cancel";
+        this.doneText = "Done";
+        this.resetText = "Reset";
         this.multiPickerColumns = [];
-        this.separator = ' ';
-        this.placeholder = '';
+        this.separator = " ";
+        this.placeholder = "";
         this.showReset = false;
-        this.cssClass = '';
+        this.cssClass = "";
         this.ionChange = new core_1.EventEmitter();
         this.ionCancel = new core_1.EventEmitter();
         this._form.register(this);
         if (_item) {
-            this.id = 'dt-' + _item.registerInput('multi-picker');
-            this._labelId = 'lbl-' + _item.id;
-            this._item.setElementClass('item-multi-picker', true);
-            this._value = this._value || '';
+            this.id = "dt-" + _item.registerInput("multi-picker");
+            this._labelId = "lbl-" + _item.id;
+            this._item.setElementClass("item-multi-picker", true);
+            this._value = this._value || "";
         }
     }
     MultiPicker.prototype._click = function (ev) {
@@ -61,11 +62,34 @@ var MultiPicker = (function () {
             pickerOptions.cssClass = this.cssClass;
         }
         var picker = this._pickerCtrl.create(pickerOptions);
-        var cancel = { text: this.cancelText, role: 'multi-picker-cancel', handler: function () { _this.ionCancel.emit(null); } };
-        var reset = { text: this.resetText, role: 'multi-picker-reset', handler: function (data) { _this.reset(); return false; } };
-        var done = { text: this.doneText, handler: function (data) { _this.onChange(data); _this.ionChange.emit(data); } };
-        pickerOptions.buttons = this.showReset ? [cancel, reset, done] : [cancel, done];
-        this._isDependent = this.multiPickerColumns.some(function (col) { return col.options.some(function (opt) { return opt.parentVal; }); });
+        var cancel = {
+            text: this.cancelText,
+            role: "multi-picker-cancel",
+            handler: function () {
+                _this.ionCancel.emit(null);
+            },
+        };
+        var reset = {
+            text: this.resetText,
+            role: "multi-picker-reset",
+            handler: function (data) {
+                _this.reset();
+                return false;
+            },
+        };
+        var done = {
+            text: this.doneText,
+            handler: function (data) {
+                _this.onChange(data);
+                _this.ionChange.emit(data);
+            },
+        };
+        pickerOptions.buttons = this.showReset
+            ? [cancel, reset, done]
+            : [cancel, done];
+        this._isDependent = this.multiPickerColumns.some(function (col) {
+            return col.options.some(function (opt) { return opt.parentVal; });
+        });
         this.generate(picker);
         if (this.multiPickerColumns.length > 1 && this._isDependent) {
             this.generateSequence();
@@ -76,7 +100,7 @@ var MultiPicker = (function () {
         picker.present(pickerOptions).then(function () {
             _this._pickerCmp = picker.instance;
             _this._pickerColumnCmps = _this._pickerCmp._cols.toArray();
-            _this._pickerColumnCmps.forEach(function (col) { return col.lastIndex = -1; });
+            _this._pickerColumnCmps.forEach(function (col) { return (col.lastIndex = -1); });
             for (var i = 0; i < picker.getColumns().length; i++) {
                 _this.validate(picker);
             }
@@ -90,7 +114,9 @@ var MultiPicker = (function () {
         var _this = this;
         var hasParentCol = this.multiPickerColumns.some(function (col) { return col.parentCol !== undefined; });
         if (!this._isDependent || !hasParentCol) {
-            this.multiPickerColumns.forEach(function (col, index) { return _this._sequence.push(index); });
+            this.multiPickerColumns.forEach(function (col, index) {
+                return _this._sequence.push(index);
+            });
         }
         else {
             var name_1 = undefined;
@@ -110,15 +136,22 @@ var MultiPicker = (function () {
         this._originSelectedIndexes = [];
         var values = this._value.toString().split(this.separator);
         this.multiPickerColumns.forEach(function (col, index) {
-            var selectedOpt = col.options.find(function (option) { return option.value == values[index]; }) || col.options[0];
+            var selectedOpt = col.options.find(function (option) { return option.value == values[index]; }) ||
+                col.options[0];
             var options = col.options;
             if (_this._isDependent) {
                 options = options.filter(function (option) { return option.parentVal === selectedOpt.parentVal; });
             }
             var column = {
                 name: col.name || index.toString(),
-                options: options.map(function (option) { return { text: option.text, value: option.value, disabled: option.disabled || false }; }),
-                columnWidth: col.columnWidth
+                options: options.map(function (option) {
+                    return {
+                        text: option.text,
+                        value: option.value,
+                        disabled: option.disabled || false,
+                    };
+                }),
+                columnWidth: col.columnWidth,
             };
             var selectedIndex = column.options.findIndex(function (option) { return option.value == values[index]; });
             selectedIndex = selectedIndex === -1 ? 0 : selectedIndex;
@@ -150,10 +183,16 @@ var MultiPicker = (function () {
                 curCol.options.splice(0, curCol.options.length);
                 this_1.multiPickerColumns[i].options.forEach(function (option) {
                     if (option.parentVal == parentOption.value) {
-                        curCol.options.push({ text: option.text, value: option.value, disabled: false });
+                        curCol.options.push({
+                            text: option.text,
+                            value: option.value,
+                            disabled: false,
+                        });
                     }
                 });
-                var selectedIndex_1 = curCol.selectedIndex >= curCol.options.length ? curCol.options.length - 1 : curCol.selectedIndex;
+                var selectedIndex_1 = curCol.selectedIndex >= curCol.options.length
+                    ? curCol.options.length - 1
+                    : curCol.selectedIndex;
                 setTimeout(function () { return _this._pickerColumnCmps[i].setSelected(selectedIndex_1, 150); }, 0);
             }
         };
@@ -214,7 +253,7 @@ var MultiPicker = (function () {
     };
     MultiPicker.prototype.setValue = function (newData) {
         if (newData === null || newData === undefined) {
-            this._value = '';
+            this._value = "";
         }
         else {
             this._value = newData;
@@ -225,23 +264,27 @@ var MultiPicker = (function () {
     };
     MultiPicker.prototype.checkHasValue = function (inputValue) {
         if (this._item) {
-            this._item.setElementClass('input-has-value', !!(inputValue && inputValue !== ''));
+            this._item.setElementClass("input-has-value", !!(inputValue && inputValue !== ""));
         }
     };
     MultiPicker.prototype.updateText = function () {
         var _this = this;
-        this._text = '';
+        this._text = "";
+        this._title = "";
         var values = this._value.toString().split(this.separator);
         this.multiPickerColumns.forEach(function (col, index) {
             var option = col.options.find(function (option) { return option.value.toString() === values[index]; });
             if (option) {
                 _this._text += "" + option.text;
+                _this._title += "" + option.title;
                 if (index < _this.multiPickerColumns.length - 1) {
                     _this._text += "" + _this.separator;
+                    _this._title += "" + _this.separator;
                 }
             }
         });
         this._text = this._text.trim();
+        this._title = this._title.trim();
     };
     Object.defineProperty(MultiPicker.prototype, "disabled", {
         get: function () {
@@ -249,7 +292,8 @@ var MultiPicker = (function () {
         },
         set: function (val) {
             this._disabled = val;
-            this._item && this._item.setElementClass('item-multi-picker-disabled', this._disabled);
+            this._item &&
+                this._item.setElementClass("item-multi-picker-disabled", this._disabled);
         },
         enumerable: true,
         configurable: true
@@ -273,7 +317,9 @@ var MultiPicker = (function () {
             _this.onTouched();
         };
     };
-    MultiPicker.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
+    MultiPicker.prototype.registerOnTouched = function (fn) {
+        this.onTouched = fn;
+    };
     MultiPicker.prototype.onChange = function (val) {
         this.setValue(this.convertObjectToString(val));
         this.updateText();
@@ -299,24 +345,29 @@ var MultiPicker = (function () {
         if (!this._pickerColumnCmps)
             return;
         if (this._isDependent) {
-            var index = this._sequence.find(function (index) { return _this._pickerColumnCmps[index].col.selectedIndex !== _this._originSelectedIndexes[index]; });
+            var index = this._sequence.find(function (index) {
+                return _this._pickerColumnCmps[index].col.selectedIndex !==
+                    _this._originSelectedIndexes[index];
+            });
             if (index === undefined)
                 return;
-            this._originSelectedIndexes.forEach(function (index, i) { return _this._pickerColumnCmps[i].col.selectedIndex = index; });
+            this._originSelectedIndexes.forEach(function (index, i) { return (_this._pickerColumnCmps[i].col.selectedIndex = index); });
             this._pickerColumnCmps[index].setSelected(this._originSelectedIndexes[index], 0);
         }
         else {
-            this._originSelectedIndexes.forEach(function (index, i) { return _this._pickerColumnCmps[i].setSelected(index, 0); });
+            this._originSelectedIndexes.forEach(function (index, i) {
+                return _this._pickerColumnCmps[i].setSelected(index, 0);
+            });
         }
     };
     return MultiPicker;
 }());
 MultiPicker.decorators = [
     { type: core_1.Component, args: [{
-                selector: 'ion-multi-picker',
-                template: "<div class=\"multi-picker-placeholder\" *ngIf=\"placeholder && !_text\">{{placeholder}}</div>\n             <div class=\"multi-picker-text\" *ngIf=\"!placeholder || _text\">{{_text}}</div>\n             <button aria-haspopup=\"true\" type=\"button\" [id]=\"id\" ion-button=\"item-cover\" [attr.aria-labelledby]=\"_labelId\" [attr.aria-disabled]=\"_disabled\" class=\"item-cover\"></button>",
+                selector: "ion-multi-picker",
+                template: "<div\n      class=\"multi-picker-placeholder\"\n      *ngIf=\"placeholder && !_text\"\n    >\n      {{ placeholder }}\n    </div>\n    <div class=\"multi-picker-text\" *ngIf=\"(!placeholder || _text) && !_title\">\n      {{ _text }}\n    </div>\n    <div class=\"multi-picker-text\" *ngIf=\"(!placeholder || _text) && _title\">\n      {{ _title }}\n    </div>\n    <button\n      aria-haspopup=\"true\"\n      type=\"button\"\n      [id]=\"id\"\n      ion-button=\"item-cover\"\n      [attr.aria-labelledby]=\"_labelId\"\n      [attr.aria-disabled]=\"_disabled\"\n      class=\"item-cover\"\n    ></button>",
                 host: {
-                    '[class.multi-picke-disabled]': '_disabled'
+                    "[class.multi-picke-disabled]": "_disabled",
                 },
                 providers: [exports.MULTI_PICKER_VALUE_ACCESSOR],
                 encapsulation: core_1.ViewEncapsulation.None,
@@ -338,8 +389,8 @@ MultiPicker.propDecorators = {
     'cssClass': [{ type: core_1.Input },],
     'ionChange': [{ type: core_1.Output },],
     'ionCancel': [{ type: core_1.Output },],
-    '_click': [{ type: core_1.HostListener, args: ['click', ['$event'],] },],
-    '_keyup': [{ type: core_1.HostListener, args: ['keyup.space',] },],
+    '_click': [{ type: core_1.HostListener, args: ["click", ["$event"],] },],
+    '_keyup': [{ type: core_1.HostListener, args: ["keyup.space",] },],
     'disabled': [{ type: core_1.Input },],
 };
 exports.MultiPicker = MultiPicker;

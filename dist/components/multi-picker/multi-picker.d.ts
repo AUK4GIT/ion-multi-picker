@@ -1,7 +1,7 @@
-import { AfterContentInit, EventEmitter, OnDestroy } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
-import { PickerController, Form, Item, PickerColumn, PickerCmp, PickerColumnCmp } from 'ionic-angular';
-import { MultiPickerColumn } from './multi-picker-options';
+import { AfterContentInit, EventEmitter, OnDestroy } from "@angular/core";
+import { ControlValueAccessor } from "@angular/forms";
+import { PickerController, Form, Item, PickerColumn, PickerCmp, PickerColumnCmp } from "ionic-angular";
+import { MultiPickerColumn } from "./multi-picker-options";
 export declare const MULTI_PICKER_VALUE_ACCESSOR: any;
 export declare class MultiPicker implements AfterContentInit, ControlValueAccessor, OnDestroy {
     private _form;
@@ -10,6 +10,7 @@ export declare class MultiPicker implements AfterContentInit, ControlValueAccess
     _disabled: any;
     _labelId: string;
     _text: string;
+    _title: string;
     _fn: Function;
     _isOpen: boolean;
     _value: any;

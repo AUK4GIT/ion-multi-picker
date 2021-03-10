@@ -1,15 +1,15 @@
-
 export interface MultiPickerOption {
-  text?: string
+  text?: string;
+  title?: string;
   value?: any;
   parentVal?: any;
-  disabled?:boolean;
+  disabled?: boolean;
 }
 
 export interface MultiPickerColumn {
-  name?:string,
-  parentCol?:string,
-  alias?:string,
-  columnWidth?:string,
-  options?: MultiPickerOption[]
+  name?: string;
+  parentCol?: string;
+  alias?: string;
+  columnWidth?: string;
+  options?: MultiPickerOption[];
 }
