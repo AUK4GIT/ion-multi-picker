@@ -36,11 +36,8 @@ export const MULTI_PICKER_VALUE_ACCESSOR: any = {
     >
       {{ placeholder }}
     </div>
-    <div class="multi-picker-text" *ngIf="(!placeholder || _text) && !_title">
+    <div class="multi-picker-text" *ngIf="!placeholder || _text">
       {{ _text }}
-    </div>
-    <div class="multi-picker-text" *ngIf="(!placeholder || _text) && _title">
-      {{ _title }}
     </div>
     <button
       aria-haspopup="true"
@@ -63,7 +60,6 @@ export class MultiPicker
   _disabled: any = false;
   _labelId: string = "";
   _text: string = "";
-  _title: string = "";
   _fn: Function;
   _isOpen: boolean = false;
   _value: any;
@@ -468,23 +464,19 @@ export class MultiPicker
    */
   updateText() {
     this._text = "";
-    this._title = "";
     let values: string[] = this._value.toString().split(this.separator);
     this.multiPickerColumns.forEach((col, index) => {
       let option = col.options.find(
         (option) => option.value.toString() === values[index]
       );
       if (option) {
-        this._text += `${option.text}`;
-        this._title += `${option.title}`;
+        this._text += option.title ? `${option.title}` : `${option.text}`;
         if (index < this.multiPickerColumns.length - 1) {
           this._text += `${this.separator}`;
-          this._title += `${this.separator}`;
         }
       }
     });
     this._text = this._text.trim();
-    this._title = this._title.trim();
   }
 
   /**

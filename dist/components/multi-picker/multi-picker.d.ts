@@ -10,7 +10,6 @@ export declare class MultiPicker implements AfterContentInit, ControlValueAccess
     _disabled: any;
     _labelId: string;
     _text: string;
-    _title: string;
     _fn: Function;
     _isOpen: boolean;
     _value: any;

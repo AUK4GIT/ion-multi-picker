@@ -16,7 +16,6 @@ var MultiPicker = (function () {
         this._disabled = false;
         this._labelId = "";
         this._text = "";
-        this._title = "";
         this._isOpen = false;
         this._isDependent = false;
         this._sequence = [];
@@ -270,21 +269,17 @@ var MultiPicker = (function () {
     MultiPicker.prototype.updateText = function () {
         var _this = this;
         this._text = "";
-        this._title = "";
         var values = this._value.toString().split(this.separator);
         this.multiPickerColumns.forEach(function (col, index) {
             var option = col.options.find(function (option) { return option.value.toString() === values[index]; });
             if (option) {
-                _this._text += "" + option.text;
-                _this._title += "" + option.title;
+                _this._text += option.title ? "" + option.title : "" + option.text;
                 if (index < _this.multiPickerColumns.length - 1) {
                     _this._text += "" + _this.separator;
-                    _this._title += "" + _this.separator;
                 }
             }
         });
         this._text = this._text.trim();
-        this._title = this._title.trim();
     };
     Object.defineProperty(MultiPicker.prototype, "disabled", {
         get: function () {
@@ -365,7 +360,7 @@ var MultiPicker = (function () {
 MultiPicker.decorators = [
     { type: core_1.Component, args: [{
                 selector: "ion-multi-picker",
-                template: "<div\n      class=\"multi-picker-placeholder\"\n      *ngIf=\"placeholder && !_text\"\n    >\n      {{ placeholder }}\n    </div>\n    <div class=\"multi-picker-text\" *ngIf=\"(!placeholder || _text) && !_title\">\n      {{ _text }}\n    </div>\n    <div class=\"multi-picker-text\" *ngIf=\"(!placeholder || _text) && _title\">\n      {{ _title }}\n    </div>\n    <button\n      aria-haspopup=\"true\"\n      type=\"button\"\n      [id]=\"id\"\n      ion-button=\"item-cover\"\n      [attr.aria-labelledby]=\"_labelId\"\n      [attr.aria-disabled]=\"_disabled\"\n      class=\"item-cover\"\n    ></button>",
+                template: "<div\n      class=\"multi-picker-placeholder\"\n      *ngIf=\"placeholder && !_text\"\n    >\n      {{ placeholder }}\n    </div>\n    <div class=\"multi-picker-text\" *ngIf=\"!placeholder || _text\">\n      {{ _text }}\n    </div>\n    <button\n      aria-haspopup=\"true\"\n      type=\"button\"\n      [id]=\"id\"\n      ion-button=\"item-cover\"\n      [attr.aria-labelledby]=\"_labelId\"\n      [attr.aria-disabled]=\"_disabled\"\n      class=\"item-cover\"\n    ></button>",
                 host: {
                     "[class.multi-picke-disabled]": "_disabled",
                 },
